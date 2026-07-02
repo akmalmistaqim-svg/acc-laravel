@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Services\BpsService;
 use App\Services\CuacaService;
+use App\Models\RiwayatPrediksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -24,7 +26,10 @@ class DashboardController extends Controller
             return redirect('/login');
         }
 
+        // Ambil data iklim
         $iklim = $this->bpsService->getStaticTable('3500', '2303');
+        
+        // Ambil daftar kota untuk dropdown
         $daftarKota = $this->cuacaService->getDaftarKota();
 
         return view('auth.dashboard', [
@@ -69,5 +74,55 @@ class DashboardController extends Controller
     public function getDaftarKota()
     {
         return response()->json($this->cuacaService->getDaftarKota());
+    }
+
+    /**
+     * API: Simpan riwayat prediksi
+     */
+    public function simpanRiwayat(Request $request)
+    {
+        if (!Session::get('user_id')) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        try {
+            $request->validate([
+                'kota' => 'required|string|max:100',
+                'suhu' => 'required|integer',
+                'kondisi' => 'nullable|string|max:100',
+                'icon' => 'nullable|string|max:10',
+                'tanggal_prediksi' => 'required|date',
+            ]);
+
+            $riwayat = RiwayatPrediksi::create([
+                'user_id' => Session::get('user_id'),
+                'kota' => $request->kota,
+                'suhu' => $request->suhu,
+                'kondisi' => $request->kondisi,
+                'icon' => $request->icon,
+                'tanggal_prediksi' => $request->tanggal_prediksi,
+            ]);
+
+            Log::info('Riwayat prediksi tersimpan', [
+                'user_id' => Session::get('user_id'),
+                'kota' => $request->kota,
+                'suhu' => $request->suhu
+            ]);
+
+            return response()->json([
+                'message' => 'Riwayat tersimpan',
+                'data' => $riwayat
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Gagal simpan riwayat prediksi', [
+                'error' => $e->getMessage(),
+                'request' => $request->all()
+            ]);
+            
+            return response()->json([
+                'error' => 'Gagal menyimpan riwayat: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

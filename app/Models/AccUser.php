@@ -1,4 +1,5 @@
 <?php
+// app/Models/AccUser.php
 
 namespace App\Models;
 
@@ -18,10 +19,16 @@ class AccUser extends Authenticatable
         'phone',
         'email',
         'password',
+        'role',
+        'is_active', // TAMBAHKAN INI
     ];
 
     protected $hidden = [
         'password',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 
     protected function casts(): array
@@ -30,4 +37,52 @@ class AccUser extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // ========== ROLE CHECK METHODS ==========
+    
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
+
+    public function isAdminKonten(): bool
+    {
+        return $this->role === 'konten';
+    }
+
+    public function isAdminPengguna(): bool
+    {
+        return $this->role === 'pengguna';
+    }
+
+    public function isAdminDiagnosis(): bool
+    {
+        return $this->role === 'diagnosis';
+    }
+
+    public function isAdmin(): bool
+    {
+        return in_array($this->role, ['superadmin', 'konten', 'pengguna', 'diagnosis']);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->is_active;
+    }
+
+    public function hasilDiagnosis()
+    {
+        return $this->hasMany(HasilDiagnosis::class, 'acc_user_id');
+    }
+// Relasi ke Kabar Sekitar
+public function kabarSekitar()
+{
+    return $this->hasMany(KabarSekitar::class, 'user_id');
+}
+
+// Relasi ke Riwayat Prediksi
+public function riwayatPrediksi()
+{
+    return $this->hasMany(RiwayatPrediksi::class, 'user_id');
+}
 }

@@ -23,8 +23,15 @@
         --white: #ffffff;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
-    
+    body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
     .navbar {
         background-color: var(--white);
         display: flex; justify-content: space-between; align-items: center;
@@ -45,9 +52,16 @@
         cursor: pointer; text-transform: uppercase; transition: background 0.3s;
     }
     .btn-logout:hover { background-color: #c53030; }
-    .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .hamburger {
+        display: none;
+        cursor: pointer;
+        flex-direction: column;
+        gap: 5px;
+        padding: 5px;
+        z-index: 1001;
+    }
     .hamburger span { display: block; width: 25px; height: 3px; background-color: var(--primary-green); border-radius: 3px; transition: 0.3s; }
-    
+
     .hero {
         margin-top: 75px; position: relative; min-height: 50vh;
         display: flex; align-items: center; padding: 50px 5%;
@@ -62,9 +76,10 @@
         display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
         text-transform: uppercase; box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
         transition: transform 0.3s, background-color 0.3s;
+        text-decoration: none;
     }
     .btn-cta:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
-    
+
     .features {
         padding: 40px 5% 60px 5%; display: grid;
         grid-template-columns: repeat(3, 1fr); gap: 30px;
@@ -198,6 +213,70 @@
         padding: 4rem 1.5rem;
     }
 
+    /* Tab Prediksi (7 Hari ke Depan / Bulan Depan) */
+    .prediksi-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 1.5px solid #e2e8f0;
+        margin-bottom: 1.5rem;
+    }
+    .prediksi-tab {
+        background: transparent;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #64748b;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -1.5px;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    .prediksi-tab.aktif { color: #2563eb; border-bottom-color: #2563eb; }
+    .prediksi-tab:hover:not(.aktif) { color: #334155; }
+
+    /* Kartu ringkasan (kondisi minggu / bulan) */
+    .ringkasan-card {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 1rem;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+    }
+    .ringkasan-emoji { font-size: 1.8rem; line-height: 1; }
+    .ringkasan-judul { font-weight: 700; color: #1e3a8a; font-size: 1rem; margin-bottom: 4px; }
+    .ringkasan-sub { font-size: 0.85rem; color: #1e40af; line-height: 1.5; }
+
+    /* List aktivitas per hari/minggu */
+    .aktivitas-item {
+        display: flex;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .aktivitas-item:last-child { border-bottom: none; }
+    .aktivitas-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+    .dot-merah { background: #ef4444; }
+    .dot-kuning { background: #f59e0b; }
+    .dot-biru { background: #3b82f6; }
+    .aktivitas-judul { font-weight: 700; color: #1e293b; font-size: 0.95rem; margin-bottom: 4px; }
+    .aktivitas-desc { font-size: 0.85rem; color: #64748b; line-height: 1.5; }
+
+    /* Kartu rekomendasi bulan depan */
+    .bulan-rekom-card { border-radius: 1rem; padding: 1.25rem; margin-bottom: 1rem; border: 1px solid; }
+    .bulan-rekom-hijau { background: #f0fdf4; border-color: #bbf7d0; }
+    .bulan-rekom-merah { background: #fef2f2; border-color: #fecaca; }
+    .bulan-rekom-kuning { background: #fffbeb; border-color: #fde68a; }
+    .bulan-rekom-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+    .badge-hijau { background: #bbf7d0; color: #166534; }
+    .badge-merah { background: #fecaca; color: #991b1b; }
+    .badge-kuning { background: #fde68a; color: #92400e; }
+    .bulan-rekom-judul { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; color: #1e293b; }
+    .bulan-rekom-desc { font-size: 0.85rem; line-height: 1.5; color: #475569; }
+
     /* Data Iklim Section */
     .section-iklim {
         background: #f4f6fa;
@@ -220,13 +299,53 @@
     #tabelIklim tr:nth-child(even) { background: #f8fafc; }
     #tabelIklim tr:hover { background: #eff6ff; transition: background 0.2s; }
 
-    .footer {
-        background: linear-gradient(160deg, #0c4a6e 0%, #075985 100%);
-        border-top: 1px solid rgba(255,255,255,0.1);
-        padding: 2rem 1.5rem;
-        text-align: center;
-        color: white;
+    /* LINK KABAR SEKITAR & RIWAYAT */
+    .link-section {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 30px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 14px;
+        border: 1px solid #e2e8e2;
+        max-width: 56rem;
+        margin-left: auto;
+        margin-right: auto;
     }
+    .link-btn {
+        padding: 12px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+    }
+    .link-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .link-btn-green { background: #4caf50; color: #fff; }
+    .link-btn-green:hover { background: #43a047; }
+    .link-btn-blue { background: #2563eb; color: #fff; }
+    .link-btn-blue:hover { background: #1d4ed8; }
+
+    .footer {
+    background: linear-gradient(160deg, #0c4a6e 0%, #075985 100%);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 2rem 1.5rem;
+    text-align: center;
+    color: white;
+    margin-top: auto;
+    width: 100%;
+}
     .max-w-4xl { max-width: 56rem; margin-left: auto; margin-right: auto; }
     .text-center { text-align: center; }
     .text-3xl { font-size: 1.875rem; }
@@ -273,15 +392,42 @@
     .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
     .text-base { font-size: 1rem; }
 
-    @media (max-width: 992px) { 
-        .features { grid-template-columns: repeat(2, 1fr); margin-top: -20px; } 
+    @media (max-width: 992px) {
+        .features { grid-template-columns: repeat(2, 1fr); margin-top: -20px; }
     }
     @media (max-width: 768px) {
-        .hamburger { display: flex; order: 2; }
-        .user-profile { order: 3; }
-        .user-name { display: none; }
-        .nav-menu { position: fixed; top: 70px; left: -100%; flex-direction: column; background-color: var(--white); width: 100%; text-align: center; transition: 0.4s; box-shadow: 0 10px 15px rgba(0,0,0,0.05); padding: 30px 0; gap: 25px; }
-        .nav-menu.active { left: 0; }
+        .hamburger { 
+            display: flex; 
+            order: 2;
+        }
+        .user-profile { 
+            order: 3; 
+        }
+        .user-name { 
+            display: none; 
+        }
+        /* NAVBAR DROPDOWN - MUNCUL DARI ATAS KE BAWAH */
+        .nav-menu {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            flex-direction: column;
+            background-color: var(--white);
+            text-align: center;
+            transition: top 0.4s ease-in-out;
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            gap: 20px;
+            z-index: 999;
+            border-bottom: 2px solid var(--primary-green);
+        }
+        .nav-menu.active {
+            top: 70px;
+        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
         .hero { padding-top: 80px; text-align: center; min-height: 40vh; }
         .hero-content { margin: 0 auto; }
         .hero-title { font-size: 28px; }
@@ -293,6 +439,9 @@
         .md\:col-span-1 { grid-column: span 1; }
         .section-prediksi { padding: 2rem 1rem; }
         .p-8 { padding: 1rem; }
+        .prediksi-tab { padding: 0.65rem 1rem; font-size: 0.85rem; }
+        .link-section { flex-direction: column; align-items: center; }
+        .link-btn { width: 100%; justify-content: center; }
     }
 </style>
 </head>
@@ -328,9 +477,10 @@
         <div class="hero-content">
             <h2 class="hero-title">DETEKSI DINI & KENDALIKAN PENYAKIT TANAMAN ANDA</h2>
             <p class="hero-description">Platform Digital Pintar untuk Diagnosis Akurat, Penanganan Efektif, dan Peningkatan Hasil Panen Petani Indonesia.</p>
-            <button class="btn-cta" onclick="window.location.href='#'">
+            <!-- TOMBOL DIUBAH - SEKARANG MENUJU /cekpenyakit -->
+            <a href="/cekpenyakit" class="btn-cta">
                 <i class="fa-solid fa-camera"></i> Mulai Identifikasi Sekarang
-            </button>
+            </a>
         </div>
     </section>
 
@@ -395,11 +545,10 @@
         </div>
     </section>
 
-    <!-- PREDIKSI CUACA -->
 <!-- PREDIKSI CUACA -->
 <section id="prediksicuaca" class="section-prediksi">
     <div class="max-w-4xl mx-auto">
-        
+
         <div class="text-center mb-10">
             <h2 class="text-3xl font-bold text-slate-800 mb-3">🔍 Prediksi Cuaca</h2>
             <p class="text-slate-500 max-w-xl mx-auto text-sm">
@@ -409,7 +558,7 @@
 
         <div class="max-w-xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
             <h3 class="text-lg font-bold text-slate-800 mb-4 border-b pb-2">Isi Data Prediksi</h3>
-            
+
             <div class="flex flex-col gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">📍 Daerah / Kota</label>
@@ -431,12 +580,13 @@
                     🔍 Cek Prediksi
                 </button>
             </div>
-            
+
             <p id="pesanError" class="text-red-500 text-sm text-center hidden mt-3">⚠️ Mohon isi daerah dan tanggal terlebih dahulu.</p>
         </div>
 
+        <!-- HASIL PREDIKSI -->
         <div id="hasilPrediksi" class="hidden">
-            
+
             <div class="bg-gradient-to-r from-blue-500 to-sky-400 text-white rounded-2xl p-6 mb-6 shadow-md flex justify-between items-center">
                 <div>
                     <p class="text-blue-100 text-sm font-medium mb-1" id="hasilLokasi">📍 Jember, Jawa Timur</p>
@@ -470,356 +620,395 @@
                 </div>
             </div>
 
-            <div>
-                <h3 class="text-slate-500 font-bold text-sm uppercase tracking-wider mb-4 border-b pb-2">Aktivitas Petani Minggu Ini</h3>
-                
-                <div class="space-y-4" id="rekAktivitasMinggu">
-                    <div class="bg-green-50 border border-green-200 rounded-xl p-4 flex gap-4 items-start">
-                        <div class="text-green-600 text-2xl mt-1">🌱</div>
-                        <div>
-                            <span class="inline-block bg-green-200 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-2">Penyiraman</span>
-                            <h4 class="font-bold text-green-900 text-base">Kurangi frekuensi siram</h4>
-                            <p class="text-sm text-green-800 mt-1">Kelembaban 82%, tanah masih cukup lembap. Siram hanya jika tanah kering saat disentuh.</p>
-                        </div>
-                    </div>
+            <!-- TAB 7 HARI / BULAN DEPAN -->
+            <div class="prediksi-tabs">
+                <button class="prediksi-tab aktif" data-tab="minggu" onclick="gantiPrediksiTab('minggu', this)">7 Hari ke Depan</button>
+                <button class="prediksi-tab" data-tab="bulan" onclick="gantiPrediksiTab('bulan', this)">Bulan Depan</button>
+            </div>
 
-                    <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 flex gap-4 items-start">
-                        <div class="text-orange-600 text-2xl mt-1">🍂</div>
-                        <div>
-                            <span class="inline-block bg-orange-200 text-orange-800 text-xs font-bold px-3 py-1 rounded-full mb-2">Pemupukan</span>
-                            <h4 class="font-bold text-orange-900 text-base">Waktu tepat untuk pupuk daun</h4>
-                            <p class="text-sm text-orange-800 mt-1">Suhu 29°C dan angin pelan (5 km/j) cocok untuk penyemprotan pupuk daun. Lakukan pagi hari.</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-red-50 border border-red-200 rounded-xl p-4 flex gap-4 items-start">
-                        <div class="text-red-600 text-2xl mt-1">🐛</div>
-                        <div>
-                            <span class="inline-block bg-red-200 text-red-800 text-xs font-bold px-3 py-1 rounded-full mb-2">Peringatan Hama</span>
-                            <h4 class="font-bold text-red-900 text-base">Risiko jamur & wereng meningkat</h4>
-                            <p class="text-sm text-red-800 mt-1">Kelembaban 82% mempercepat tumbuhnya jamur daun dan perkembangan wereng. Lakukan pengecekan rutin.</p>
-                        </div>
+            <div id="tabMinggu">
+                <div id="ringkasanMinggu" class="ringkasan-card">
+                    <div class="ringkasan-emoji">☁️</div>
+                    <div>
+                        <div class="ringkasan-judul">Memuat ringkasan minggu...</div>
+                        <div class="ringkasan-sub"></div>
                     </div>
                 </div>
+
+                <h3 class="text-slate-500 font-bold text-sm uppercase tracking-wider mb-2 border-b pb-2">Aktivitas Petani Minggu Ini</h3>
+                <div id="rekAktivitasMinggu"></div>
             </div>
-            
+
+            <div id="tabBulan" class="hidden">
+                <div id="ringkasanBulan" class="ringkasan-card">
+                    <div class="ringkasan-emoji">📅</div>
+                    <div>
+                        <div class="ringkasan-judul">Memuat prediksi bulan depan...</div>
+                        <div class="ringkasan-sub"></div>
+                    </div>
+                </div>
+
+                <div id="rekomendasiBulan" class="mb-6"></div>
+
+                <h3 class="text-slate-500 font-bold text-sm uppercase tracking-wider mb-2 border-b pb-2">Aktivitas Petani Bulan Depan</h3>
+                <div id="aktivitasBulan"></div>
+            </div>
+
         </div>
+        <!-- END hasilPrediksi -->
+
     </div>
 </section>
 
-    <footer class="footer">
-        <p>&copy; {{ date('Y') }} Website Agro Clima Care (ACC). Semua Hak Dilindungi.</p>
-    </footer>
+<!-- ========================================== -->
+<!-- LINK KABAR SEKITAR & RIWAYAT PREDIKSI -->
+<!-- ========================================== -->
+<div id="linkSetelahPrediksi" style="display: none; max-width: 56rem; margin: 0 auto; padding: 0 1.5rem 2rem;">
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; padding:20px; background:#fff; border-radius:14px; border:1px solid #e2e8e2;">
+        <a href="/kabarsekitar" style="padding:12px 32px; background:#4caf50; color:#fff; border-radius:10px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:8px; transition:all 0.3s;">
+            <i class="fa-solid fa-comment"></i> Kabar Sekitar
+        </a>
+        <a href="/riwayatprediksi" style="padding:12px 32px; background:#2563eb; color:#fff; border-radius:10px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:8px; transition:all 0.3s;">
+            <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Prediksi
+        </a>
+    </div>
+    <p style="text-align:center; font-size:13px; color:#8fa89a; margin-top:12px;">
+        Bagikan kabar cuaca atau lihat riwayat prediksi dari pengguna lain
+    </p>
+</div>
+
+<!-- ========================================== -->
+<!-- FOOTER - SELALU ADA -->
+<!-- ========================================== -->
+<footer class="footer">
+    <p>&copy; {{ date('Y') }} Website Agro Clima Care (ACC). Semua Hak Dilindungi.</p>
+</footer>
 
     <script>
-        // HAMBURGER MENU
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const navMenu = document.getElementById('navMenu');
-        hamburgerBtn.addEventListener('click', () => {
-            hamburgerBtn.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-        document.querySelectorAll('.nav-item a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburgerBtn.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
-
-        // GRAFIK CUACA
-        let grafikChart = null;
-        let grafikDataCache = null;
-        let grafikNamaKota = '';
-
-        function tampilkanGrafik() {
-            const select = document.getElementById('grafikSelectKota');
-            const kota = select.value;
-
-            if (!kota) {
-                document.getElementById('grafikKonten').innerHTML =
-                    '<div class="grafik-status grafik-error">⚠️ Pilih kota terlebih dahulu.</div>';
-                return;
-            }
-
-            grafikNamaKota = kota;
-
-            const btn = document.getElementById('grafikBtnCari');
-            btn.disabled = true;
-            btn.textContent = 'Memuat...';
-
-            document.getElementById('grafikKonten').innerHTML = 
-                '<div class="grafik-status"><span class="grafik-spinner"></span> Mengambil data cuaca <b>' + kota + '</b>...</div>';
-
-            fetch('/api/cuaca?kota=' + encodeURIComponent(kota))
-                .then(res => res.json())
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById('grafikKonten').innerHTML = 
-                            '<div class="grafik-status grafik-error">❌ ' + data.error + '</div>';
-                        return;
-                    }
-
-                    const processed = processWeatherData(data);
-                    grafikDataCache = processed;
-                    renderGrafikKonten(processed);
-                })
-                .catch(err => {
-                    document.getElementById('grafikKonten').innerHTML = 
-                        '<div class="grafik-status grafik-error">❌ Gagal mengambil data: ' + err.message + '</div>';
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.textContent = '📊 Tampilkan';
-                });
-        }
-
-        function processWeatherData(data) {
-            const labels = [];
-            const suhuMax = [];
-            const suhuMin = [];
-            const hujan = [];
-            const kelembaban = [];
-
-            const dailyData = {};
-            data.list.forEach(item => {
-                const date = item.dt_txt.split(' ')[0];
-                if (!dailyData[date]) {
-                    dailyData[date] = {
-                        temps: [],
-                        humidity: [],
-                        rain: 0
-                    };
-                }
-                dailyData[date].temps.push(item.main.temp);
-                dailyData[date].humidity.push(item.main.humidity);
-                if (item.rain && item.rain['3h']) {
-                    dailyData[date].rain += item.rain['3h'];
-                }
-            });
-
-            const dates = Object.keys(dailyData).slice(0, 5);
-            dates.forEach(date => {
-                const d = new Date(date);
-                const hari = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'][d.getDay()];
-                const tgl = d.getDate();
-                const bln = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'][d.getMonth()];
-                labels.push(hari + ' ' + tgl + ' ' + bln);
-
-                const temps = dailyData[date].temps;
-                suhuMax.push(Math.round(Math.max(...temps)));
-                suhuMin.push(Math.round(Math.min(...temps)));
-                hujan.push(Math.round(dailyData[date].rain * 10) / 10);
-                kelembaban.push(Math.round(dailyData[date].humidity.reduce((a, b) => a + b, 0) / dailyData[date].humidity.length));
-            });
-
-            return { labels, suhuMax, suhuMin, hujan, kelembaban };
-        }
-
-        function renderGrafikKonten(data) {
-            const max = Math.round(data.suhuMax.reduce((a, b) => a + b, 0) / data.suhuMax.length);
-            const min = Math.round(data.suhuMin.reduce((a, b) => a + b, 0) / data.suhuMin.length);
-            const hujan = data.hujan.reduce((a, b) => a + b, 0).toFixed(1);
-            const rh = Math.round(data.kelembaban.reduce((a, b) => a + b, 0) / data.kelembaban.length);
-
-            document.getElementById('grafikKonten').innerHTML = `
-                <span class="grafik-kota-label">📍 ${grafikNamaKota}, Jawa Timur</span>
-                <div class="grafik-metrics" id="grafikMetrics">
-                    <div class="grafik-metric">
-                        <div class="grafik-metric-icon">🌡️</div>
-                        <div class="grafik-metric-label">Suhu Maks</div>
-                        <div class="grafik-metric-value">${max}°C</div>
-                    </div>
-                    <div class="grafik-metric">
-                        <div class="grafik-metric-icon">🌡️</div>
-                        <div class="grafik-metric-label">Suhu Min</div>
-                        <div class="grafik-metric-value">${min}°C</div>
-                    </div>
-                    <div class="grafik-metric">
-                        <div class="grafik-metric-icon">🌧️</div>
-                        <div class="grafik-metric-label">Total Hujan</div>
-                        <div class="grafik-metric-value">${hujan} mm</div>
-                    </div>
-                    <div class="grafik-metric">
-                        <div class="grafik-metric-icon">💧</div>
-                        <div class="grafik-metric-label">Kelembaban</div>
-                        <div class="grafik-metric-value">${rh}%</div>
-                    </div>
-                </div>
-                <div class="grafik-tabs">
-                    <button class="grafik-tab aktif" onclick="gantiTab('harian', this)">Harian</button>
-                </div>
-                <div class="grafik-canvas-wrap">
-                    <canvas id="grafikCanvas"></canvas>
-                </div>
-                <div class="grafik-legend">
-                    <span class="grafik-legend-item">
-                        <span class="grafik-legend-dot" style="background:#0ea5e9;"></span> Suhu Maks (°C)
-                    </span>
-                    <span class="grafik-legend-item">
-                        <span class="grafik-legend-dot" style="background:#38bdf8;opacity:.7;"></span> Suhu Min (°C)
-                    </span>
-                    <span class="grafik-legend-item">
-                        <span class="grafik-legend-dot" style="background:#1d9e75;"></span> Curah Hujan (mm)
-                    </span>
-                    <span class="grafik-legend-item">
-                        <span class="grafik-legend-dot" style="background:#f59e0b;"></span> Kelembaban (%)
-                    </span>
-                </div>
-                <p style="font-size:0.72rem;color:#94a3b8;margin-top:1rem;text-align:center;">
-                    Sumber: OpenWeatherMap · Data 5 hari ke depan
-                </p>
-            `;
-            renderChart(data);
-        }
-
-        function renderChart(data) {
-            const ctx = document.getElementById('grafikCanvas');
-            if (!ctx) return;
-            if (grafikChart) { grafikChart.destroy(); grafikChart = null; }
-
-            grafikChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels,
-                    datasets: [
-                        {
-                            label: 'Suhu Maks (°C)',
-                            data: data.suhuMax,
-                            type: 'line',
-                            borderColor: '#0ea5e9',
-                            backgroundColor: 'rgba(14,165,233,0.10)',
-                            pointBackgroundColor: '#0ea5e9',
-                            borderWidth: 2,
-                            pointRadius: 4,
-                            tension: 0.35,
-                            yAxisID: 'yTemp',
-                            fill: false,
-                            order: 1
-                        },
-                        {
-                            label: 'Suhu Min (°C)',
-                            data: data.suhuMin,
-                            type: 'line',
-                            borderColor: '#38bdf8',
-                            backgroundColor: 'rgba(56,189,248,0.08)',
-                            pointBackgroundColor: '#38bdf8',
-                            borderWidth: 1.5,
-                            pointRadius: 3,
-                            borderDash: [4,3],
-                            tension: 0.35,
-                            yAxisID: 'yTemp',
-                            fill: false,
-                            order: 1
-                        },
-                        {
-                            label: 'Curah Hujan (mm)',
-                            data: data.hujan,
-                            type: 'bar',
-                            backgroundColor: 'rgba(29,158,117,0.65)',
-                            borderColor: '#1d9e75',
-                            borderWidth: 0,
-                            borderRadius: 4,
-                            yAxisID: 'yHujan',
-                            order: 2
-                        },
-                        {
-                            label: 'Kelembaban (%)',
-                            data: data.kelembaban,
-                            type: 'line',
-                            borderColor: '#f59e0b',
-                            backgroundColor: 'transparent',
-                            pointBackgroundColor: '#f59e0b',
-                            borderWidth: 1.5,
-                            borderDash: [3,3],
-                            pointRadius: 3,
-                            tension: 0.3,
-                            yAxisID: 'yTemp',
-                            fill: false,
-                            order: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(ctx) {
-                                    const label = ctx.dataset.label || '';
-                                    if (label.includes('Hujan')) return ' ' + label + ': ' + ctx.parsed.y + ' mm';
-                                    if (label.includes('Kelembaban')) return ' ' + label + ': ' + ctx.parsed.y + '%';
-                                    return ' ' + label + ': ' + ctx.parsed.y + '°C';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        yTemp: {
-                            type: 'linear', position: 'left', min: 0, max: 100,
-                            ticks: { font: { size: 11 }, color: '#94a3b8', callback: v => v <= 50 ? v + '°' : v + '%' },
-                            grid: { color: 'rgba(148,163,184,0.15)' }
-                        },
-                        yHujan: {
-                            type: 'linear', position: 'right', min: 0,
-                            ticks: { font: { size: 11 }, color: '#1d9e75', callback: v => v + ' mm' },
-                            grid: { drawOnChartArea: false }
-                        },
-                        x: {
-                            ticks: { font: { size: 11 }, color: '#94a3b8', autoSkip: false, maxRotation: 45 },
-                            grid: { color: 'rgba(148,163,184,0.08)' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function gantiTab(tab, el) {
-            document.querySelectorAll('.grafik-tab').forEach(b => b.classList.remove('aktif'));
-            el.classList.add('aktif');
-        }
-
-        // LOAD DATA IKLIM SAAT HALAMAN DIMUAT
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/iklim')
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === 'OK') {
-                        document.getElementById('tabelIklim').innerHTML = data.tabel;
-                    } else {
-                        document.getElementById('tabelIklim').innerHTML = 
-                            '<p class="text-center text-red-400">❌ ' + (data.message || 'Gagal memuat data') + '</p>';
-                    }
-                })
-                .catch(err => {
-                    document.getElementById('tabelIklim').innerHTML = 
-                        '<p class="text-center text-red-400">❌ Terjadi kesalahan: ' + err.message + '</p>';
-                });
-        });
-
 // ==========================================
-// PREDIKSI CUACA
+// HAMBURGER MENU - DROPDOWN DARI ATAS
 // ==========================================
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const navMenu = document.getElementById('navMenu');
+hamburgerBtn.addEventListener('click', () => {
+    hamburgerBtn.classList.toggle('active');
+    navMenu.classList.toggle('active');
+});
+document.querySelectorAll('.nav-item a').forEach(link => {
+    link.addEventListener('click', () => {
+        hamburgerBtn.classList.remove('active');
+        navMenu.classList.remove('active');
+    });
+});
 
-// Flatpickr untuk tanggal
-flatpickr("#inputTanggal_display", {
-    dateFormat: "d/m/Y",
-    maxDate: "today",
-    disableMobile: true,
-    onChange: function(selectedDates, dateStr, instance) {
-        if (selectedDates.length > 0) {
-            const d = selectedDates[0];
-            const yyyy = d.getFullYear();
-            const mm = String(d.getMonth() + 1).padStart(2, '0');
-            const dd = String(d.getDate()).padStart(2, '0');
-            document.getElementById('inputTanggal').value = `${yyyy}-${mm}-${dd}`;
-        }
+// Tutup menu saat scroll
+window.addEventListener('scroll', () => {
+    if (navMenu.classList.contains('active')) {
+        hamburgerBtn.classList.remove('active');
+        navMenu.classList.remove('active');
     }
 });
 
-) {
+// ==========================================
+// GRAFIK CUACA
+// ==========================================
+let grafikChart = null;
+let grafikDataCache = null;
+let grafikNamaKota = '';
+
+function tampilkanGrafik() {
+    const select = document.getElementById('grafikSelectKota');
+    const kota = select.value;
+
+    if (!kota) {
+        document.getElementById('grafikKonten').innerHTML =
+            '<div class="grafik-status grafik-error">⚠️ Pilih kota terlebih dahulu.</div>';
+        return;
+    }
+
+    grafikNamaKota = kota;
+
+    const btn = document.getElementById('grafikBtnCari');
+    btn.disabled = true;
+    btn.textContent = 'Memuat...';
+
+    document.getElementById('grafikKonten').innerHTML =
+        '<div class="grafik-status"><span class="grafik-spinner"></span> Mengambil data cuaca <b>' + kota + '</b>...</div>';
+
+    fetch('/api/cuaca?kota=' + encodeURIComponent(kota))
+        .then(res => res.json())
+        .then(data => {
+            if (data.error) {
+                document.getElementById('grafikKonten').innerHTML =
+                    '<div class="grafik-status grafik-error">❌ ' + data.error + '</div>';
+                return;
+            }
+
+            const processed = processWeatherData(data);
+            grafikDataCache = processed;
+            renderGrafikKonten(processed);
+        })
+        .catch(err => {
+            document.getElementById('grafikKonten').innerHTML =
+                '<div class="grafik-status grafik-error">❌ Gagal mengambil data: ' + err.message + '</div>';
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.textContent = '📊 Tampilkan';
+        });
+}
+
+function processWeatherData(data) {
+    const labels = [];
+    const suhuMax = [];
+    const suhuMin = [];
+    const hujan = [];
+    const kelembaban = [];
+
+    const dailyData = {};
+    data.list.forEach(item => {
+        const date = item.dt_txt.split(' ')[0];
+        if (!dailyData[date]) {
+            dailyData[date] = {
+                temps: [],
+                humidity: [],
+                rain: 0
+            };
+        }
+        dailyData[date].temps.push(item.main.temp);
+        dailyData[date].humidity.push(item.main.humidity);
+        if (item.rain && item.rain['3h']) {
+            dailyData[date].rain += item.rain['3h'];
+        }
+    });
+
+    const dates = Object.keys(dailyData).slice(0, 5);
+    dates.forEach(date => {
+        const d = new Date(date);
+        const hari = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'][d.getDay()];
+        const tgl = d.getDate();
+        const bln = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'][d.getMonth()];
+        labels.push(hari + ' ' + tgl + ' ' + bln);
+
+        const temps = dailyData[date].temps;
+        suhuMax.push(Math.round(Math.max(...temps)));
+        suhuMin.push(Math.round(Math.min(...temps)));
+        hujan.push(Math.round(dailyData[date].rain * 10) / 10);
+        kelembaban.push(Math.round(dailyData[date].humidity.reduce((a, b) => a + b, 0) / dailyData[date].humidity.length));
+    });
+
+    return { labels, suhuMax, suhuMin, hujan, kelembaban };
+}
+
+function renderGrafikKonten(data) {
+    const max = Math.round(data.suhuMax.reduce((a, b) => a + b, 0) / data.suhuMax.length);
+    const min = Math.round(data.suhuMin.reduce((a, b) => a + b, 0) / data.suhuMin.length);
+    const hujan = data.hujan.reduce((a, b) => a + b, 0).toFixed(1);
+    const rh = Math.round(data.kelembaban.reduce((a, b) => a + b, 0) / data.kelembaban.length);
+
+    document.getElementById('grafikKonten').innerHTML = `
+        <span class="grafik-kota-label">📍 ${grafikNamaKota}, Jawa Timur</span>
+        <div class="grafik-metrics" id="grafikMetrics">
+            <div class="grafik-metric">
+                <div class="grafik-metric-icon">🌡️</div>
+                <div class="grafik-metric-label">Suhu Maks</div>
+                <div class="grafik-metric-value">${max}°C</div>
+            </div>
+            <div class="grafik-metric">
+                <div class="grafik-metric-icon">🌡️</div>
+                <div class="grafik-metric-label">Suhu Min</div>
+                <div class="grafik-metric-value">${min}°C</div>
+            </div>
+            <div class="grafik-metric">
+                <div class="grafik-metric-icon">🌧️</div>
+                <div class="grafik-metric-label">Total Hujan</div>
+                <div class="grafik-metric-value">${hujan} mm</div>
+            </div>
+            <div class="grafik-metric">
+                <div class="grafik-metric-icon">💧</div>
+                <div class="grafik-metric-label">Kelembaban</div>
+                <div class="grafik-metric-value">${rh}%</div>
+            </div>
+        </div>
+        <div class="grafik-tabs">
+            <button class="grafik-tab aktif" onclick="gantiTab('harian', this)">Harian</button>
+        </div>
+        <div class="grafik-canvas-wrap">
+            <canvas id="grafikCanvas"></canvas>
+        </div>
+        <div class="grafik-legend">
+            <span class="grafik-legend-item">
+                <span class="grafik-legend-dot" style="background:#0ea5e9;"></span> Suhu Maks (°C)
+            </span>
+            <span class="grafik-legend-item">
+                <span class="grafik-legend-dot" style="background:#38bdf8;opacity:.7;"></span> Suhu Min (°C)
+            </span>
+            <span class="grafik-legend-item">
+                <span class="grafik-legend-dot" style="background:#1d9e75;"></span> Curah Hujan (mm)
+            </span>
+            <span class="grafik-legend-item">
+                <span class="grafik-legend-dot" style="background:#f59e0b;"></span> Kelembaban (%)
+            </span>
+        </div>
+        <p style="font-size:0.72rem;color:#94a3b8;margin-top:1rem;text-align:center;">
+            Sumber: OpenWeatherMap · Data 5 hari ke depan
+        </p>
+    `;
+    renderChart(data);
+}
+
+function renderChart(data) {
+    const ctx = document.getElementById('grafikCanvas');
+    if (!ctx) return;
+    if (grafikChart) { grafikChart.destroy(); grafikChart = null; }
+
+    grafikChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.labels,
+            datasets: [
+                {
+                    label: 'Suhu Maks (°C)',
+                    data: data.suhuMax,
+                    type: 'line',
+                    borderColor: '#0ea5e9',
+                    backgroundColor: 'rgba(14,165,233,0.10)',
+                    pointBackgroundColor: '#0ea5e9',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    tension: 0.35,
+                    yAxisID: 'yTemp',
+                    fill: false,
+                    order: 1
+                },
+                {
+                    label: 'Suhu Min (°C)',
+                    data: data.suhuMin,
+                    type: 'line',
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56,189,248,0.08)',
+                    pointBackgroundColor: '#38bdf8',
+                    borderWidth: 1.5,
+                    pointRadius: 3,
+                    borderDash: [4,3],
+                    tension: 0.35,
+                    yAxisID: 'yTemp',
+                    fill: false,
+                    order: 1
+                },
+                {
+                    label: 'Curah Hujan (mm)',
+                    data: data.hujan,
+                    type: 'bar',
+                    backgroundColor: 'rgba(29,158,117,0.65)',
+                    borderColor: '#1d9e75',
+                    borderWidth: 0,
+                    borderRadius: 4,
+                    yAxisID: 'yHujan',
+                    order: 2
+                },
+                {
+                    label: 'Kelembaban (%)',
+                    data: data.kelembaban,
+                    type: 'line',
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'transparent',
+                    pointBackgroundColor: '#f59e0b',
+                    borderWidth: 1.5,
+                    borderDash: [3,3],
+                    pointRadius: 3,
+                    tension: 0.3,
+                    yAxisID: 'yTemp',
+                    fill: false,
+                    order: 0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            const label = ctx.dataset.label || '';
+                            if (label.includes('Hujan')) return ' ' + label + ': ' + ctx.parsed.y + ' mm';
+                            if (label.includes('Kelembaban')) return ' ' + label + ': ' + ctx.parsed.y + '%';
+                            return ' ' + label + ': ' + ctx.parsed.y + '°C';
+                        }
+                    }
+                }
+            },
+            scales: {
+                yTemp: {
+                    type: 'linear', position: 'left', min: 0, max: 100,
+                    ticks: { font: { size: 11 }, color: '#94a3b8', callback: v => v <= 50 ? v + '°' : v + '%' },
+                    grid: { color: 'rgba(148,163,184,0.15)' }
+                },
+                yHujan: {
+                    type: 'linear', position: 'right', min: 0,
+                    ticks: { font: { size: 11 }, color: '#1d9e75', callback: v => v + ' mm' },
+                    grid: { drawOnChartArea: false }
+                },
+                x: {
+                    ticks: { font: { size: 11 }, color: '#94a3b8', autoSkip: false, maxRotation: 45 },
+                    grid: { color: 'rgba(148,163,184,0.08)' }
+                }
+            }
+        }
+    });
+}
+
+function gantiTab(tab, el) {
+    document.querySelectorAll('.grafik-tab').forEach(b => b.classList.remove('aktif'));
+    el.classList.add('aktif');
+}
+
+// ==========================================
+// LOAD DATA IKLIM
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/iklim')
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'OK') {
+                document.getElementById('tabelIklim').innerHTML = data.tabel;
+            } else {
+                document.getElementById('tabelIklim').innerHTML =
+                    '<p class="text-center text-red-400">❌ ' + (data.message || 'Gagal memuat data') + '</p>';
+            }
+        })
+        .catch(err => {
+            document.getElementById('tabelIklim').innerHTML =
+                '<p class="text-center text-red-400">❌ Terjadi kesalahan: ' + err.message + '</p>';
+        });
+});
+
+// ==========================================
+// FLATPICKR - TANGGAL PREDIKSI
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#inputTanggal_display", {
+        dateFormat: "d/m/Y",
+        disableMobile: true,
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                const d = selectedDates[0];
+                const yyyy = d.getFullYear();
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                document.getElementById('inputTanggal').value = `${yyyy}-${mm}-${dd}`;
+            }
+        }
+    });
+});
+
+// ==========================================
+// CEK PREDIKSI
+// ==========================================
+function cekPrediksi() {
     const kota = document.getElementById('inputDaerah').value;
     const tanggal = document.getElementById('inputTanggal').value;
 
@@ -829,8 +1018,9 @@ flatpickr("#inputTanggal_display", {
     }
     document.getElementById('pesanError').classList.add('hidden');
 
-    // Tampilkan loading
     document.getElementById('hasilPrediksi').classList.remove('hidden');
+    document.getElementById('linkSetelahPrediksi').style.display = 'block';
+    
     document.getElementById('hasilLokasi').textContent = '📍 ' + kota + ', Jawa Timur';
     document.getElementById('hasilTanggal').textContent = 'Memuat data...';
     document.getElementById('hasilSuhu').textContent = '--°';
@@ -840,7 +1030,6 @@ flatpickr("#inputTanggal_display", {
     document.getElementById('hasilHujan').textContent = '-- mm';
     document.getElementById('hasilUV').textContent = '-- hPa';
 
-    // Panggil API cuaca
     fetch('/api/cuaca?kota=' + encodeURIComponent(kota))
         .then(res => res.json())
         .then(data => {
@@ -849,29 +1038,38 @@ flatpickr("#inputTanggal_display", {
                 return;
             }
 
-            // Cari data untuk tanggal yang dipilih
             const targetDate = new Date(tanggal);
             const targetDateStr = targetDate.toISOString().split('T')[0];
 
             let foundData = null;
-            for (let item of data.list) {
-                const itemDate = item.dt_txt.split(' ')[0];
+            let isApproximate = false;
+            
+            // Cari exact match
+            for (let i = 0; i < data.list.length; i++) {
+                const itemDate = data.list[i].dt_txt.split(' ')[0];
                 if (itemDate === targetDateStr) {
-                    foundData = item;
+                    foundData = data.list[i];
                     break;
                 }
             }
 
+            // Cari terdekat jika tidak ada exact match
             if (!foundData) {
-                // Cari data terdekat
+                isApproximate = true;
                 let closestDiff = Infinity;
-                for (let item of data.list) {
-                    const itemDate = new Date(item.dt_txt);
+                let closestIndex = -1;
+                
+                for (let i = 0; i < data.list.length; i++) {
+                    const itemDate = new Date(data.list[i].dt_txt);
                     const diff = Math.abs(itemDate - targetDate);
                     if (diff < closestDiff) {
                         closestDiff = diff;
-                        foundData = item;
+                        closestIndex = i;
                     }
+                }
+                
+                if (closestIndex !== -1) {
+                    foundData = data.list[closestIndex];
                 }
             }
 
@@ -884,15 +1082,13 @@ flatpickr("#inputTanggal_display", {
                 const icon = foundData.weather[0].icon;
                 const rain = foundData.rain ? foundData.rain['3h'] || 0 : 0;
 
-                // Update UI
                 document.getElementById('hasilSuhu').textContent = temp + '°';
                 document.getElementById('hasilKondisi').textContent = condition;
                 document.getElementById('hasilLembab').textContent = humidity + '%';
-               function cekPrediksi( document.getElementById('hasilAngin').textContent = windSpeed + ' km/j';
+                document.getElementById('hasilAngin').textContent = windSpeed + ' km/j';
                 document.getElementById('hasilHujan').textContent = (rain > 0 ? Math.round(rain * 10) / 10 : 0) + ' mm';
                 document.getElementById('hasilUV').textContent = pressure + ' hPa';
 
-                // Emoji
                 const emojiMap = {
                     '01d': '☀️', '01n': '🌙',
                     '02d': '⛅', '02n': '☁️',
@@ -906,228 +1102,268 @@ flatpickr("#inputTanggal_display", {
                 };
                 document.getElementById('hasilEmoji').textContent = emojiMap[icon] || '⛅';
 
-                // Format tanggal
                 const d = new Date(foundData.dt_txt);
                 const hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][d.getDay()];
                 const tgl = d.getDate();
                 const bln = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][d.getMonth()];
                 const thn = d.getFullYear();
-                document.getElementById('hasilTanggal').textContent = hari + ', ' + tgl + ' ' + bln + ' ' + thn;
+                
+                let tanggalDisplay = hari + ', ' + tgl + ' ' + bln + ' ' + thn;
+                if (isApproximate) {
+                    tanggalDisplay += ' 🔄 (Data terdekat)';
+                }
+                document.getElementById('hasilTanggal').textContent = tanggalDisplay;
 
-                // Generate rekomendasi
-                generateRekomendasi(temp, humidity, rain, condition, kota, windSpeed);
+                // SIMPAN RIWAYAT
+                fetch('/api/simpan-riwayat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        kota: kota,
+                        suhu: temp,
+                        kondisi: condition,
+                        icon: icon,
+                        tanggal_prediksi: tanggal
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Riwayat tersimpan:', data);
+                })
+                .catch(error => {
+                    console.error('Gagal simpan riwayat:', error);
+                });
+
             } else {
-                document.getElementById('hasilKondisi').textContent = 'Data tidak ditemukan untuk tanggal ini';
+                document.getElementById('hasilKondisi').textContent = '⚠️ Tidak ada data cuaca untuk tanggal ini';
+                document.getElementById('hasilSuhu').textContent = '--°';
+                document.getElementById('hasilLembab').textContent = '--%';
+                document.getElementById('hasilAngin').textContent = '-- km/j';
+                document.getElementById('hasilHujan').textContent = '-- mm';
+                document.getElementById('hasilUV').textContent = '-- hPa';
+                document.getElementById('hasilEmoji').textContent = '❓';
+                
+                const ringkasanMinggu = document.getElementById('ringkasanMinggu');
+                ringkasanMinggu.innerHTML = `
+                    <div class="ringkasan-emoji">📡</div>
+                    <div>
+                        <div class="ringkasan-judul">Data Cuaca Real Time</div>
+                        <div class="ringkasan-sub">Data yang ditampilkan adalah data cuaca real time dari OpenWeatherMap untuk 5 hari ke depan. Silakan pilih tanggal lain.</div>
+                    </div>
+                `;
+                document.getElementById('rekAktivitasMinggu').innerHTML = '';
+                return;
             }
+
+            const dailyArr = aggregateDaily(data.list);
+            generateMingguan(dailyArr, kota);
+            generateBulanan(dailyArr, kota);
         })
         .catch(err => {
             document.getElementById('hasilKondisi').textContent = 'Error: ' + err.message;
         });
 }
 
-function generateRekomendasi(temp, humidity, rain, condition, kota, windSpeed) {
-    const isRainy = rain > 0 || condition.includes('hujan');
-    const isHot = temp > 30;
-    const isHumid = humidity > 80;
-    const isWindy = windSpeed > 20;
-
-    // Banner
-    let bannerEmoji, bannerTitle, bannerDetail;
-    if (isRainy) {
-        bannerEmoji = '🌧️';
-        bannerTitle = 'Musim Hujan';
-        bannerDetail = kota + ' • Waspada genangan';
-    } else if (isHot) {
-        bannerEmoji = '☀️';
-        bannerTitle = 'Cuaca Panas';
-        bannerDetail = kota + ' • Jaga hidrasi tanaman';
-    } else {
-        bannerEmoji = '⛅';
-        bannerTitle = 'Cuaca Cerah';
-        bannerDetail = kota + ' • Kondisi ideal untuk bertani';
-    }
-
-    document.getElementById('rekEmojiBanner').textContent = bannerEmoji;
-    document.getElementById('rekJudulBanner').textContent = bannerTitle;
-    document.getElementById('rekDetailBanner').textContent = bannerDetail + ' • ' + temp + '°C · Kelembaban ' + humidity + '%' + (isRainy ? ' · Peluang hujan ' + rain + ' mm' : '') + ' · Angin ' + windSpeed + ' km/j';
-
-    // Kartu Minggu (7 hari)
-    const mingguCards = document.getElementById('rekKartuMinggu');
-    mingguCards.innerHTML = '';
-
-    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-    const weatherEmojis = isRainy ? ['🌧️', '☁️', '🌦️', '🌧️', '☁️', '🌦️', '🌧️'] : ['☀️', '⛅', '☀️', '🌤️', '⛅', '☀️', '🌤️'];
-    const tempVariations = isHot ? [2, 1, 3, 0, 2, 1, 2] : [-1, 0, 1, -2, 0, 1, 0];
-
-    days.forEach((day, i) => {
-        const dayTemp = temp + tempVariations[i];
-        const card = document.createElement('div');
-        card.className = 'flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200';
-        card.innerHTML = `
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">${weatherEmojis[i]}</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">${day}</p>
-                    <p class="text-xs text-gray-500">${Math.round(dayTemp)}°C</p>
-                </div>
-            </div>
-            <span class="text-xs text-gray-400">${isRainy ? 'Berpotensi hujan' : 'Cerah'}</span>
-        `;
-        mingguCards.appendChild(card);
+// ==========================================
+// FUNGSI PEMBANTU
+// ==========================================
+function aggregateDaily(list) {
+    const grouped = {};
+    list.forEach(item => {
+        const date = item.dt_txt.split(' ')[0];
+        if (!grouped[date]) {
+            grouped[date] = { temps: [], humid: [], rain: 0, conditions: [] };
+        }
+        grouped[date].temps.push(item.main.temp);
+        grouped[date].humid.push(item.main.humidity);
+        if (item.rain && item.rain['3h']) grouped[date].rain += item.rain['3h'];
+        grouped[date].conditions.push(item.weather[0].main);
     });
 
-    // Aktivitas Minggu
-    const aktivitasMinggu = document.getElementById('rekAktivitasMinggu');
-    let aktivitasHTML = '';
+    const dates = Object.keys(grouped).slice(0, 5);
+    return dates.map(date => {
+        const g = grouped[date];
+        const tempAvg = Math.round(g.temps.reduce((a, b) => a + b, 0) / g.temps.length);
+        const humidAvg = Math.round(g.humid.reduce((a, b) => a + b, 0) / g.humid.length);
+        const rainTotal = Math.round(g.rain * 10) / 10;
 
-    if (isRainy) {
-        aktivitasHTML = `
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">🚫</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Hindari penyemprotan pestisida</p>
-                    <p class="text-xs text-gray-500">Hujan dapat mengurangi efektivitas pestisida</p>
-                </div>
-            </div>
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">💧</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Kurangi frekuensi penyiraman</p>
-                    <p class="text-xs text-gray-500">Kelembaban ${humidity}%, tanah masih cukup lembap</p>
-                </div>
-            </div>
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">⚠️</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Waspada jamur & wereng</p>
-                    <p class="text-xs text-gray-500">Kelembaban ${humidity}% mempercepat pertumbuhan jamur</p>
-                </div>
-            </div>
-        `;
-    } else if (isHot) {
-        aktivitasHTML = `
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">💧</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Perbanyak irigasi</p>
-                    <p class="text-xs text-gray-500">Suhu ${temp}°C meningkatkan penguapan</p>
-                </div>
-            </div>
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">🌱</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Waktu tepat untuk pemupukan</p>
-                    <p class="text-xs text-gray-500">Suhu ${temp}°C dan angin ${windSpeed} km/j cocok untuk pupuk daun</p>
-                </div>
-            </div>
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">✅</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Risiko jamur rendah</p>
-                    <p class="text-xs text-gray-500">Kondisi aman untuk tanaman</p>
-                </div>
-            </div>
-        `;
+        const condCounts = {};
+        g.conditions.forEach(c => condCounts[c] = (condCounts[c] || 0) + 1);
+        const condDominant = Object.keys(condCounts).reduce((a, b) => condCounts[a] >= condCounts[b] ? a : b);
+
+        return { date, tempAvg, humidAvg, rainTotal, condDominant };
+    });
+}
+
+function namaHari(dateStr) {
+    const d = new Date(dateStr);
+    return ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][d.getDay()];
+}
+
+function generateMingguan(dailyArr, kota) {
+    const hujanDays = dailyArr.filter(d => d.rainTotal > 0 || d.condDominant === 'Rain' || d.condDominant === 'Thunderstorm').length;
+    const avgHumid = Math.round(dailyArr.reduce((a, b) => a + b.humidAvg, 0) / dailyArr.length);
+    const avgTemp = Math.round(dailyArr.reduce((a, b) => a + b.tempAvg, 0) / dailyArr.length);
+    const isMusimHujan = hujanDays >= 3;
+
+    const ringkasan = document.getElementById('ringkasanMinggu');
+    if (isMusimHujan) {
+        ringkasan.innerHTML = `
+            <div class="ringkasan-emoji">🌧️</div>
+            <div>
+                <div class="ringkasan-judul">Tunda penanaman bibit baru</div>
+                <div class="ringkasan-sub">Hujan diperkirakan turun ${hujanDays} dari ${dailyArr.length} hari ke depan di ${kota}. Tunda penanaman hingga cuaca lebih stabil. Manfaatkan waktu ini untuk menyiapkan dan mengolah lahan.</div>
+            </div>`;
     } else {
-        aktivitasHTML = `
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">🌱</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Kondisi mendukung untuk menanam</p>
-                    <p class="text-xs text-gray-500">Suhu ${temp}°C dan kelembaban ${humidity}% ideal untuk pertumbuhan bibit</p>
-                </div>
-            </div>
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">✅</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Waktu tepat untuk penyemprotan</p>
-                    <p class="text-xs text-gray-500">Cuaca cerah mendukung penyerapan optimal</p>
-                </div>
-            </div>
-            <div class="p-3 flex items-center gap-3">
-                <span class="text-xl">📋</span>
-                <div>
-                    <p class="text-sm font-semibold text-gray-800">Perencanaan musim tanam</p>
-                    <p class="text-xs text-gray-500">Kondisi stabil untuk persiapan lahan</p>
-                </div>
-            </div>
-        `;
+        ringkasan.innerHTML = `
+            <div class="ringkasan-emoji">☀️</div>
+            <div>
+                <div class="ringkasan-judul">Kondisi mendukung aktivitas tanam</div>
+                <div class="ringkasan-sub">Cuaca di ${kota} relatif stabil, suhu rata-rata ${avgTemp}°C dan kelembaban ${avgHumid}%. Manfaatkan minggu ini untuk menanam, memupuk, dan merawat tanaman.</div>
+            </div>`;
     }
 
-    aktivitasMinggu.innerHTML = aktivitasHTML;
+    const cont = document.getElementById('rekAktivitasMinggu');
+    let html = '';
+    let prevHujan = false;
 
-    // Aktivitas Bulan
-    const aktivitasBulan = document.getElementById('rekAktivitasBulan');
-    aktivitasBulan.innerHTML = `
-        <div class="p-3 flex items-center gap-3">
-            <span class="text-xl">📋</span>
-            <div>
-                <p class="text-sm font-semibold text-gray-800">Perencanaan musim tanam</p>
-                <p class="text-xs text-gray-500">${isRainy ? 'Pilih varietas tahan hujan' : 'Pilih varietas tahan panas'}</p>
-            </div>
-        </div>
-        <div class="p-3 flex items-center gap-3">
-            <span class="text-xl">🧪</span>
-            <div>
-                <p class="text-sm font-semibold text-gray-800">Persiapan lahan</p>
-                <p class="text-xs text-gray-500">${isRainy ? 'Buat saluran drainase' : 'Persiapkan sistem irigasi'}</p>
-            </div>
-        </div>
-        <div class="p-3 flex items-center gap-3">
-            <span class="text-xl">🌱</span>
-            <div>
-                <p class="text-sm font-semibold text-gray-800">${isRainy ? 'Perbanyak pupuk organik' : 'Perbanyak pupuk kompos'}</p>
-                <p class="text-xs text-gray-500">${isRainy ? 'Nutrisi tercuci oleh hujan' : 'Kebutuhan nutrisi meningkat'}</p>
-            </div>
-        </div>
-    `;
+    dailyArr.forEach((d, i) => {
+        const hari = namaHari(d.date);
+        const hujanHariIni = d.rainTotal > 1 || d.condDominant === 'Rain' || d.condDominant === 'Thunderstorm';
+        let dot, judul, desc;
 
-    // Kartu Bulan
-    const bulanCards = document.getElementById('rekKartuBulan');
-    bulanCards.innerHTML = '';
-    const bulanNames = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
-    const bulanEmojis = isRainy ? ['🌧️', '☁️', '🌦️', '🌧️'] : ['☀️', '⛅', '☀️', '🌤️'];
-    const bulanDescs = isRainy ? ['Hujan sedang', 'Berawan', 'Hujan ringan', 'Hujan'] : ['Cerah', 'Berawan', 'Cerah terik', 'Cerah'];
+        if (hujanHariIni && d.rainTotal > 5) {
+            dot = 'dot-merah';
+            judul = `${hari}: Pantau drainase lahan`;
+            desc = `Hujan lebat diperkirakan (${d.rainTotal} mm). Jangan keluar lahan saat hujan deras. Pastikan saluran air tidak tersumbat agar lahan tidak tergenang.`;
+        } else if (hujanHariIni) {
+            dot = 'dot-merah';
+            judul = `${hari}: Periksa kondisi tanaman`;
+            desc = `Setelah hujan, periksa apakah ada tanaman roboh atau akar terendam. Tegakkan kembali tanaman yang miring.`;
+        } else if (d.humidAvg > 75) {
+            dot = 'dot-kuning';
+            judul = `${hari}: Inspeksi hama & jamur`;
+            desc = `Kelembaban ${d.humidAvg}% meningkatkan risiko jamur dan wereng. Periksa bagian bawah daun, semprot fungisida organik jika ada bercak.`;
+        } else if (prevHujan) {
+            dot = 'dot-biru';
+            judul = `${hari}: Kurangi atau tunda penyiraman`;
+            desc = `Hujan sudah cukup membasahi tanah. Tunda penyiraman hari ini. Cek kelembaban tanah sebelum memutuskan siram atau tidak.`;
+        } else {
+            dot = 'dot-biru';
+            judul = `${hari}: Penyiraman & perawatan rutin`;
+            desc = `Suhu ${d.tempAvg}°C dan kelembaban ${d.humidAvg}% mendukung penyiraman dan pemupukan rutin pada pagi atau sore hari.`;
+        }
 
-    bulanNames.forEach((name, i) => {
-        const card = document.createElement('div');
-        card.className = 'flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200';
-        card.innerHTML = `
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">${bulanEmojis[i]}</span>
+        if (i === dailyArr.length - 1 && isMusimHujan) {
+            dot = 'dot-biru';
+            judul = `${hari}: Perkuat drainase & pematang`;
+            desc = `Manfaatkan jeda hujan untuk bersihkan saluran air dan perkuat pematang sawah agar lahan tidak kebanjiran minggu depan.`;
+        }
+
+        prevHujan = hujanHariIni;
+
+        html += `
+            <div class="aktivitas-item">
+                <span class="aktivitas-dot ${dot}"></span>
                 <div>
-                    <p class="text-sm font-semibold text-gray-800">${name}</p>
-                    <p class="text-xs text-gray-500">${bulanDescs[i]}</p>
+                    <div class="aktivitas-judul">${judul}</div>
+                    <div class="aktivitas-desc">${desc}</div>
                 </div>
-            </div>
-            <span class="text-xs text-gray-400">~${Math.round(temp + (i * 0.5))}°C</span>
-        `;
-        bulanCards.appendChild(card);
+            </div>`;
     });
 
-    // Judul bulan
-    document.getElementById('rekJudulBulan').textContent = isRainy ? 'Prediksi: Musim Hujan' : isHot ? 'Prediksi: Musim Panas' : 'Prediksi: Cuaca Stabil';
-    document.getElementById('rekDetailBulan').textContent = kota + ' • ' + (isRainy ? 'Persiapan antisipasi banjir' : isHot ? 'Persiapan antisipasi kekeringan' : 'Kondisi stabil untuk bertani');
+    cont.innerHTML = html;
 }
 
-function setTabRek(tab) {
-    const tabMinggu = document.getElementById('tabMinggu');
-    const tabBulan = document.getElementById('tabBulan');
-    const rekMinggu = document.getElementById('rekMinggu');
-    const rekBulan = document.getElementById('rekBulan');
+function generateBulanan(dailyArr, kota) {
+    const avgTemp = Math.round(dailyArr.reduce((a, b) => a + b.tempAvg, 0) / dailyArr.length);
+    const avgHumid = Math.round(dailyArr.reduce((a, b) => a + b.humidAvg, 0) / dailyArr.length);
+    const hujanDays = dailyArr.filter(d => d.rainTotal > 0 || d.condDominant === 'Rain' || d.condDominant === 'Thunderstorm').length;
+    const isMusimHujan = hujanDays >= 3;
 
-    if (tab === 'minggu') {
-        tabMinggu.className = 'flex-1 py-3 text-sm font-semibold text-sky-600 border-b-2 border-sky-500 bg-white transition-all';
-        tabBulan.className = 'flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition-all';
-        rekMinggu.classList.remove('hidden');
-        rekBulan.classList.add('hidden');
+    const now = new Date();
+    const bulanDepan = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const namaBulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][bulanDepan.getMonth()];
+
+    const ringkasan = document.getElementById('ringkasanBulan');
+    const rekomendasi = document.getElementById('rekomendasiBulan');
+    const aktivitas = document.getElementById('aktivitasBulan');
+
+    if (isMusimHujan) {
+        ringkasan.innerHTML = `
+            <div class="ringkasan-emoji">🌦️</div>
+            <div>
+                <div class="ringkasan-judul">Prediksi ${namaBulan}: Musim hujan, waspadai banjir lahan</div>
+                <div class="ringkasan-sub">Hujan masih sering · Drainase harus siap (estimasi dari rata-rata 5 hari terakhir di ${kota})</div>
+            </div>`;
+
+        rekomendasi.innerHTML = `
+            <div class="bulan-rekom-card bulan-rekom-hijau">
+                <span class="bulan-rekom-badge badge-hijau">Tanam</span>
+                <div class="bulan-rekom-judul">Pilih tanaman tahan air</div>
+                <div class="bulan-rekom-desc">Kondisi basah cocok untuk padi sawah. Hindari tanaman yang mudah busuk akar. Pastikan drainase lahan berjalan baik sebelum tanam.</div>
+            </div>
+            <div class="bulan-rekom-card bulan-rekom-merah">
+                <span class="bulan-rekom-badge badge-merah">Antisipasi</span>
+                <div class="bulan-rekom-judul">Perkuat drainase & pematang sawah</div>
+                <div class="bulan-rekom-desc">Hujan masih sering terjadi. Bersihkan saluran air, perkuat pematang agar lahan tidak tergenang. Lakukan minggu ini sebelum hujan semakin lebat.</div>
+            </div>
+            <div class="bulan-rekom-card bulan-rekom-kuning">
+                <span class="bulan-rekom-badge badge-kuning">Irigasi</span>
+                <div class="bulan-rekom-judul">Kurangi irigasi, manfaatkan air hujan</div>
+                <div class="bulan-rekom-desc">Air hujan sudah cukup. Kurangi penggunaan pompa. Fokus pada pengelolaan air agar tidak berlebih dan merusak akar tanaman.</div>
+            </div>`;
+
+        aktivitas.innerHTML = `
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-merah"></span><div><div class="aktivitas-judul">Minggu 1: Persiapan drainase</div><div class="aktivitas-desc">Bersihkan dan perbaiki saluran air sebelum intensitas hujan meningkat.</div></div></div>
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-kuning"></span><div><div class="aktivitas-judul">Minggu 2: Pantau risiko hama & jamur</div><div class="aktivitas-desc">Kelembaban tinggi (rata-rata ${avgHumid}%) meningkatkan risiko penyakit tanaman.</div></div></div>
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-biru"></span><div><div class="aktivitas-judul">Minggu 3: Evaluasi kondisi lahan</div><div class="aktivitas-desc">Periksa tanaman yang terdampak hujan dan lakukan penyulaman jika perlu.</div></div></div>
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-biru"></span><div><div class="aktivitas-judul">Minggu 4: Persiapan musim berikutnya</div><div class="aktivitas-desc">Mulai rencanakan pola tanam untuk bulan setelahnya berdasarkan tren cuaca.</div></div></div>`;
     } else {
-        tabBulan.className = 'flex-1 py-3 text-sm font-semibold text-sky-600 border-b-2 border-sky-500 bg-white transition-all';
-        tabMinggu.className = 'flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent transition-all';
-        rekBulan.classList.remove('hidden');
-        rekMinggu.classList.add('hidden');
+        ringkasan.innerHTML = `
+            <div class="ringkasan-emoji">☀️</div>
+            <div>
+                <div class="ringkasan-judul">Prediksi ${namaBulan}: Cuaca cenderung kering & stabil</div>
+                <div class="ringkasan-sub">Suhu rata-rata ${avgTemp}°C · Kelembaban ${avgHumid}% (estimasi dari rata-rata 5 hari terakhir di ${kota})</div>
+            </div>`;
+
+        rekomendasi.innerHTML = `
+            <div class="bulan-rekom-card bulan-rekom-hijau">
+                <span class="bulan-rekom-badge badge-hijau">Tanam</span>
+                <div class="bulan-rekom-judul">Waktu baik untuk menanam & memupuk</div>
+                <div class="bulan-rekom-desc">Kondisi kering dan stabil mendukung pertumbuhan bibit serta penyerapan pupuk daun yang optimal.</div>
+            </div>
+            <div class="bulan-rekom-card bulan-rekom-kuning">
+                <span class="bulan-rekom-badge badge-kuning">Irigasi</span>
+                <div class="bulan-rekom-judul">Tingkatkan frekuensi irigasi</div>
+                <div class="bulan-rekom-desc">Curah hujan minim, pastikan kebutuhan air tanaman tetap tercukupi terutama saat siang hari.</div>
+            </div>
+            <div class="bulan-rekom-card bulan-rekom-merah">
+                <span class="bulan-rekom-badge badge-merah">Antisipasi</span>
+                <div class="bulan-rekom-judul">Waspada kekeringan lahan</div>
+                <div class="bulan-rekom-desc">Pantau kelembaban tanah secara berkala dan siapkan cadangan air jika musim kering berlanjut.</div>
+            </div>`;
+
+        aktivitas.innerHTML = `
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-biru"></span><div><div class="aktivitas-judul">Minggu 1: Penanaman & pemupukan</div><div class="aktivitas-desc">Manfaatkan cuaca stabil untuk menanam bibit baru dan memupuk lahan.</div></div></div>
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-biru"></span><div><div class="aktivitas-judul">Minggu 2: Penyiraman rutin</div><div class="aktivitas-desc">Pastikan irigasi berjalan teratur karena curah hujan rendah.</div></div></div>
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-kuning"></span><div><div class="aktivitas-judul">Minggu 3: Pantau kondisi tanah</div><div class="aktivitas-desc">Periksa kelembaban tanah, tambahkan mulsa jika diperlukan untuk menjaga kelembaban.</div></div></div>
+            <div class="aktivitas-item"><span class="aktivitas-dot dot-merah"></span><div><div class="aktivitas-judul">Minggu 4: Evaluasi & persiapan musim depan</div><div class="aktivitas-desc">Catat hasil dan siapkan rencana tanam untuk bulan berikutnya.</div></div></div>`;
     }
 }
-    </script>
+
+// ==========================================
+// TAB SWITCHING
+// ==========================================
+function gantiPrediksiTab(tab, el) {
+    document.querySelectorAll('.prediksi-tab').forEach(b => b.classList.remove('aktif'));
+    el.classList.add('aktif');
+    document.getElementById('tabMinggu').classList.toggle('hidden', tab !== 'minggu');
+    document.getElementById('tabBulan').classList.toggle('hidden', tab !== 'bulan');
+}
+</script>
 </body>
 </html>

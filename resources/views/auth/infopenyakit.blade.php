@@ -36,7 +36,6 @@
             min-height: 100vh;
         }
 
-        /* --- NAVBAR --- */
         .navbar {
             background-color: var(--white);
             display: flex;
@@ -122,6 +121,8 @@
             cursor: pointer;
             flex-direction: column;
             gap: 5px;
+            padding: 5px;
+            z-index: 1001;
         }
 
         .hamburger span {
@@ -133,7 +134,6 @@
             transition: 0.3s;
         }
 
-        /* --- HERO SECTION --- */
         .hero {
             margin-top: 70px;
             position: relative;
@@ -213,7 +213,6 @@
             color: var(--primary-green);
         }
 
-        /* --- FILTER SECTION --- */
         .filter-section {
             padding: 20px 5%;
             display: flex;
@@ -254,7 +253,6 @@
             background-color: var(--primary-green);
         }
 
-        /* --- DISEASE LIST --- */
         .disease-list {
             padding: 40px 5%;
             max-width: 1200px;
@@ -294,6 +292,16 @@
             font-weight: 700;
         }
 
+        .disease-card h4 a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .disease-card h4 a:hover {
+            color: var(--primary-green);
+        }
+
         .disease-card .disease-tag {
             display: inline-block;
             background-color: var(--light-green);
@@ -313,10 +321,20 @@
             margin-top: 8px;
         }
 
+        .disease-card .disease-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: var(--text-muted);
+            grid-column: 1 / -1;
         }
 
         .empty-state i {
@@ -325,7 +343,12 @@
             opacity: 0.3;
         }
 
-        /* --- FOOTER --- */
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
         footer {
             background-color: var(--white);
             text-align: center;
@@ -336,25 +359,44 @@
             margin-top: auto;
         }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .hamburger { display: flex; order: 2; }
-            .user-profile { order: 3; }
-            .user-name { display: none; }
+            .hamburger { 
+                display: flex; 
+                order: 2;
+            }
+            .user-profile { 
+                order: 3; 
+            }
+            .user-name { 
+                display: none; 
+            }
             .nav-menu {
                 position: fixed;
-                top: 70px; left: -100%;
+                top: -100%;
+                left: 0;
+                width: 100%;
                 flex-direction: column;
                 background-color: var(--white);
-                width: 100%; text-align: center;
-                transition: 0.4s;
-                box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-                padding: 30px 0; gap: 25px;
+                text-align: center;
+                transition: top 0.4s ease-in-out;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                padding: 20px 0;
+                gap: 20px;
+                z-index: 999;
+                border-bottom: 2px solid var(--primary-green);
             }
-            .nav-menu.active { left: 0; }
-            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-            .hamburger.active span:nth-child(2) { opacity: 0; }
-            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+            .nav-menu.active {
+                top: 70px;
+            }
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
 
             .hero { min-height: 40vh; padding-top: 80px; }
             .hero-title { font-size: 26px; }
@@ -400,7 +442,7 @@
             <p class="hero-description">Kumpulan artikel dan sumber terpercaya tentang penyakit tanaman.<br>Klik judul untuk membaca artikel lengkap.</p>
             
             <div class="search-box">
-                <input type="text" placeholder="Cari penyakit tanaman...">
+                <input type="text" id="searchInput" placeholder="Cari penyakit tanaman..." onkeyup="filterArtikel()">
                 <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
             </div>
         </div>
@@ -408,56 +450,41 @@
 
     <section class="filter-section">
         <span class="filter-label">Filter:</span>
-        <button class="filter-btn active">Semua</button>
-        <button class="filter-btn">Padi</button>
-        <button class="filter-btn">Cabai</button>
-        <button class="filter-btn">Tomat</button>
-        <button class="filter-btn">Jagung</button>
+        <button class="filter-btn active" data-filter="semua" onclick="filterTanaman('semua', this)">Semua</button>
+        @php
+            $tanamanList = $artikel->pluck('jenis_tanaman')->unique();
+        @endphp
+        @foreach($tanamanList as $tanaman)
+            <button class="filter-btn" data-filter="{{ strtolower($tanaman) }}" onclick="filterTanaman('{{ strtolower($tanaman) }}', this)">
+                {{ $tanaman }}
+            </button>
+        @endforeach
     </section>
 
-    <div class="disease-list">
-        <!-- Disease Cards -->
-        <div class="disease-card">
-            <div class="disease-icon">🌿</div>
-            <h4>Bercak Daun (Cercospora)</h4>
-            <p>Penyakit pada tanaman cabai yang disebabkan oleh jamur Cercospora capsici.</p>
-            <span class="disease-tag">Cabai</span>
-        </div>
-
-        <div class="disease-card">
-            <div class="disease-icon">🌾</div>
-            <h4>Penyakit Blas (Pyricularia)</h4>
-            <p>Penyakit penting pada tanaman padi yang disebabkan oleh jamur Pyricularia oryzae.</p>
-            <span class="disease-tag">Padi</span>
-        </div>
-
-        <div class="disease-card">
-            <div class="disease-icon">🍅</div>
-            <h4>Busuk Buah (Phytophthora)</h4>
-            <p>Penyakit pada tomat yang disebabkan oleh jamur Phytophthora infestans.</p>
-            <span class="disease-tag">Tomat</span>
-        </div>
-
-        <div class="disease-card">
-            <div class="disease-icon">🌽</div>
-            <h4>Karat Daun (Puccinia)</h4>
-            <p>Penyakit pada jagung yang disebabkan oleh jamur Puccinia sorghi.</p>
-            <span class="disease-tag">Jagung</span>
-        </div>
-
-        <div class="disease-card">
-            <div class="disease-icon">🌿</div>
-            <h4>Virus Kuning (Gemini)</h4>
-            <p>Penyakit virus pada cabai yang ditularkan oleh kutu kebul (Bemisia tabaci).</p>
-            <span class="disease-tag">Cabai</span>
-        </div>
-
-        <div class="disease-card">
-            <div class="disease-icon">🌾</div>
-            <h4>Hawar Daun (Xanthomonas)</h4>
-            <p>Penyakit bakteri pada padi yang disebabkan oleh Xanthomonas oryzae.</p>
-            <span class="disease-tag">Padi</span>
-        </div>
+    <div class="disease-list" id="artikelList">
+        @forelse($artikel as $item)
+            <div class="disease-card" data-tanaman="{{ strtolower($item->jenis_tanaman) }}" data-judul="{{ strtolower($item->judul) }}">
+                <div class="disease-icon">🌿</div>
+                <h4>
+                    <a href="{{ $item->url_artikel }}" target="_blank">{{ $item->judul }}</a>
+                </h4>
+                @if($item->deskripsi)
+                    <p>{{ Str::limit($item->deskripsi, 120) }}</p>
+                @endif
+                <span class="disease-tag">{{ $item->jenis_tanaman }}</span>
+                @if($item->kategori)
+                    <div class="disease-meta">
+                        <span>📂 {{ $item->kategori }}</span>
+                    </div>
+                @endif
+            </div>
+        @empty
+            <div class="empty-state">
+                <i class="fa-solid fa-book-open"></i>
+                <h3>Belum Ada Artikel</h3>
+                <p>Belum ada artikel informasi penyakit yang tersedia. Silakan cek kembali nanti.</p>
+            </div>
+        @endforelse
     </div>
 
     <footer>
@@ -480,13 +507,93 @@
             });
         });
 
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
+        window.addEventListener('scroll', () => {
+            if (navMenu.classList.contains('active')) {
+                hamburgerBtn.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
         });
+
+        // ==========================================
+        // FILTER BERDASARKAN TANAMAN
+        // ==========================================
+        function filterTanaman(tanaman, btn) {
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const cards = document.querySelectorAll('.disease-card');
+            let adaYangTampil = false;
+
+            cards.forEach(card => {
+                const dataTanaman = card.getAttribute('data-tanaman');
+                if (tanaman === 'semua' || dataTanaman === tanaman) {
+                    card.style.display = 'block';
+                    adaYangTampil = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Tampilkan pesan jika tidak ada hasil
+            const emptyState = document.querySelector('.empty-state');
+            if (!adaYangTampil && !emptyState) {
+                // Buat pesan jika belum ada
+                const list = document.getElementById('artikelList');
+                const msg = document.createElement('div');
+                msg.className = 'empty-state';
+                msg.innerHTML = `
+                    <i class="fa-solid fa-search"></i>
+                    <h3>Tidak Ditemukan</h3>
+                    <p>Tidak ada artikel untuk tanaman "${tanaman}"</p>
+                `;
+                list.appendChild(msg);
+            } else if (adaYangTampil && emptyState) {
+                emptyState.remove();
+            }
+        }
+
+        // ==========================================
+        // PENCARIAN ARTIKEL
+        // ==========================================
+        function filterArtikel() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.disease-card');
+            let adaYangTampil = false;
+
+            cards.forEach(card => {
+                const judul = card.getAttribute('data-judul') || '';
+                const tanaman = card.getAttribute('data-tanaman') || '';
+                const deskripsi = card.querySelector('p')?.textContent?.toLowerCase() || '';
+
+                if (judul.includes(keyword) || tanaman.includes(keyword) || deskripsi.includes(keyword)) {
+                    card.style.display = 'block';
+                    adaYangTampil = true;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Reset filter buttons
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.filter-btn[data-filter="semua"]')?.classList.add('active');
+
+            // Tampilkan pesan jika tidak ada hasil
+            const emptyState = document.querySelector('.empty-state');
+            if (!adaYangTampil && !emptyState) {
+                const list = document.getElementById('artikelList');
+                const msg = document.createElement('div');
+                msg.className = 'empty-state';
+                msg.innerHTML = `
+                    <i class="fa-solid fa-search"></i>
+                    <h3>Tidak Ditemukan</h3>
+                    <p>Tidak ada artikel dengan kata kunci "${keyword}"</p>
+                `;
+                list.appendChild(msg);
+            } else if (adaYangTampil && emptyState) {
+                emptyState.remove();
+            }
+        }
     </script>
 </body>
 </html>

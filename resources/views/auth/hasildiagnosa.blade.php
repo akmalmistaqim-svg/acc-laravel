@@ -37,7 +37,6 @@
             min-height: 100vh;
         }
 
-        /* --- NAVBAR --- */
         .navbar {
             background-color: var(--white);
             display: flex;
@@ -123,6 +122,8 @@
             cursor: pointer;
             flex-direction: column;
             gap: 5px;
+            padding: 5px;
+            z-index: 1001;
         }
 
         .hamburger span {
@@ -134,7 +135,6 @@
             transition: 0.3s;
         }
 
-        /* --- CONTENT AREA --- */
         .content-area {
             flex: 1;
             padding: 110px 5% 50px;
@@ -211,7 +211,6 @@
             transform: translateY(-2px);
         }
 
-        /* --- REPORT CARD (jika ada data) --- */
         .report-card {
             background-color: var(--white);
             width: 100%;
@@ -354,7 +353,6 @@
             background-color: var(--light-green);
         }
 
-        /* --- FOOTER --- */
         footer {
             background-color: var(--white);
             text-align: center;
@@ -365,7 +363,6 @@
             margin-top: auto;
         }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 860px) {
             .report-body {
                 flex-direction: column;
@@ -379,23 +376,43 @@
         }
 
         @media (max-width: 768px) {
-            .hamburger { display: flex; order: 2; }
-            .user-profile { order: 3; }
-            .user-name { display: none; }
+            .hamburger { 
+                display: flex; 
+                order: 2;
+            }
+            .user-profile { 
+                order: 3; 
+            }
+            .user-name { 
+                display: none; 
+            }
             .nav-menu {
                 position: fixed;
-                top: 70px; left: -100%;
+                top: -100%;
+                left: 0;
+                width: 100%;
                 flex-direction: column;
                 background-color: var(--white);
-                width: 100%; text-align: center;
-                transition: 0.4s;
-                box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-                padding: 30px 0; gap: 25px;
+                text-align: center;
+                transition: top 0.4s ease-in-out;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                padding: 20px 0;
+                gap: 20px;
+                z-index: 999;
+                border-bottom: 2px solid var(--primary-green);
             }
-            .nav-menu.active { left: 0; }
-            .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-            .hamburger.active span:nth-child(2) { opacity: 0; }
-            .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+            .nav-menu.active {
+                top: 70px;
+            }
+            .hamburger.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            .hamburger.active span:nth-child(2) {
+                opacity: 0;
+            }
+            .hamburger.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
             
             .content-area { padding-top: 100px; }
             .report-header { flex-direction: column; gap: 10px; align-items: flex-start; }
@@ -434,10 +451,10 @@
     </nav>
 
     <div class="content-area">
-        <div class="page-badge">HASIL LAPORAN ANDA</div>
+    <div class="page-badge">HASIL LAPORAN ANDA</div>
 
-        <!-- Empty State (belum ada diagnosa) -->
-        <div class="empty-state" id="emptyState">
+    @if($diagnosa->isEmpty())
+        <div class="empty-state">
             <i class="fa-solid fa-file-medical"></i>
             <h3>Belum Ada Hasil Diagnosa</h3>
             <p>Anda belum melakukan identifikasi penyakit. Silakan lakukan identifikasi penyakit terlebih dahulu.</p>
@@ -445,82 +462,92 @@
                 <i class="fa-solid fa-camera"></i> Identifikasi Sekarang
             </a>
         </div>
-
-        <!-- Report Card (jika sudah ada hasil) -->
-        <div class="report-card" id="reportCard">
+    @else
+        @foreach($diagnosa as $item)
+        <div class="report-card" style="display:block;">
             <div class="report-header">
-                <div class="report-date">Dikirim pada: <strong>4 Juni 2026, 08:30 WIB</strong></div>
-                <div class="status-badge">
-                    <i class="fa-solid fa-circle-check"></i> Selesai Diperiksa Admin
-                </div>
+                <div class="report-date">Dikirim pada: <strong>{{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y, H:i') }} WIB</strong></div>
+                @if($item->nama_penyakit)
+                    <div class="status-badge">
+                        <i class="fa-solid fa-circle-check"></i> Selesai Diperiksa Admin
+                    </div>
+                @else
+                    <div class="status-badge" style="background-color:#fef9c3; color:#854d0e;">
+                        <i class="fa-solid fa-clock"></i> Menunggu Diagnosa Admin
+                    </div>
+                @endif
             </div>
 
             <div class="report-body">
                 <div class="report-image-container">
-                    <img src="https://images.unsplash.com/photo-1622383563227-04401ab4e5ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Foto Tanaman">
+                    <img src="{{ asset('storage/' . $item->foto) }}" alt="Foto Tanaman">
                     <span class="report-image-label">Foto unggahan Anda</span>
                 </div>
 
                 <div class="report-details">
-                    <h3 class="disease-title">Bercak Daun (Cercospora)</h3>
-                    
-                    <div class="detail-section">
-                        <h4><i class="fa-solid fa-microscope"></i> Catatan Admin / Analisis</h4>
-                        <p>Berdasarkan foto yang dikirimkan, terlihat adanya bercak-bercak coklat melingkar dengan pusat berwarna abu-abu pada permukaan daun. Ini merupakan gejala khas dari serangan jamur <em>Cercospora sp.</em> Kondisi ini sering dipicu oleh kelembapan udara yang sangat tinggi.</p>
-                    </div>
+                    @if($item->nama_penyakit)
+                        <h3 class="disease-title">{{ $item->nama_penyakit }}</h3>
 
-                    <div class="detail-section">
-                        <h4><i class="fa-solid fa-kit-medical"></i> Saran Penanganan</h4>
-                        <ul class="suggestion-list">
-                            <li>Segera pangkas dan musnahkan daun-daun yang sudah terinfeksi parah untuk mencegah penyebaran spora jamur ke daun yang sehat.</li>
-                            <li>Perbaiki sirkulasi udara di sekitar area tanam dengan mengurangi kelembapan, kurangi penyiraman pada sore/malam hari.</li>
-                            <li>Aplikasikan fungisida berbahan aktif <em>Mancozeb</em> atau <em>Difenokonazol</em> sesuai dengan dosis yang tertera pada kemasan produk.</li>
-                            <li>Lakukan rotasi tanaman pada musim tanam berikutnya untuk memutus siklus hidup patogen di dalam tanah.</li>
-                        </ul>
-                    </div>
+                        <div class="detail-section">
+                            <h4><i class="fa-solid fa-microscope"></i> Catatan Admin / Analisis</h4>
+                            <p>{{ $item->analisis }}</p>
+                        </div>
+
+                        <div class="detail-section">
+                            <h4><i class="fa-solid fa-kit-medical"></i> Saran Penanganan</h4>
+                            <p>{{ $item->saran_penanganan }}</p>
+                        </div>
+                    @else
+                        <div style="display:flex; flex-direction:column; justify-content:center; height:100%; gap:12px; color:var(--text-muted);">
+                            <i class="fa-solid fa-hourglass-half" style="font-size:40px; color:#eab308;"></i>
+                            <h3 style="color:var(--text-dark);">Sedang Diproses</h3>
+                            <p style="font-size:14px;">Foto Anda sudah diterima. Admin sedang menganalisis dan akan segera mengisi hasil diagnosa.</p>
+                        </div>
+                    @endif
                 </div>
             </div>
 
             <div class="report-actions">
-                <button class="btn btn-outline" onclick="window.print()">
-                    <i class="fa-solid fa-print"></i> Cetak Laporan
-                </button>
+                @if($item->nama_penyakit)
+                    <button class="btn btn-outline" onclick="window.print()">
+                        <i class="fa-solid fa-print"></i> Cetak Laporan
+                    </button>
+                @endif
                 <a href="/cekpenyakit" class="btn btn-primary">
                     <i class="fa-solid fa-camera"></i> Identifikasi Lagi
                 </a>
             </div>
         </div>
-    </div>
+        @endforeach
+    @endif
+</div>
 
     <footer>
         <p>&copy; {{ date('Y') }} Website Agro Clima Care (ACC). Semua Hak Dilindungi.</p>
     </footer>
 
     <script>
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const navMenu = document.getElementById('navMenu');
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const navMenu = document.getElementById('navMenu');
 
-        hamburgerBtn.addEventListener('click', () => {
-            hamburgerBtn.classList.toggle('active');
-            navMenu.classList.toggle('active');
+    hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-item a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('active');
+            navMenu.classList.remove('active');
         });
+    });
 
-        document.querySelectorAll('.nav-item a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburgerBtn.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
-
-        // Toggle antara empty state dan report card
-        // Untuk demo, tampilkan empty state dulu
-        // Ganti ke true untuk menampilkan report card
-        const hasData = false; // Ubah ke true untuk lihat report card
-
-        if (hasData) {
-            document.getElementById('emptyState').style.display = 'none';
-            document.getElementById('reportCard').style.display = 'block';
+    window.addEventListener('scroll', () => {
+        if (navMenu.classList.contains('active')) {
+            hamburgerBtn.classList.remove('active');
+            navMenu.classList.remove('active');
         }
+    });
     </script>
 </body>
 </html>
