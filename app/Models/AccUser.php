@@ -12,6 +12,17 @@ class AccUser extends Authenticatable
     use HasApiTokens, Notifiable;
 
     protected $table = 'acc_users';
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->id)) {
+                $model->id = (self::max('id') ?? 0) + 1;
+            }
+        });
+    }
     
     protected $fillable = [
         'nama',
