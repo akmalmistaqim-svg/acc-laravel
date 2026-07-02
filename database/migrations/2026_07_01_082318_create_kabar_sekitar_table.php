@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kabar_sekitar', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->primary();
             $table->foreignId('user_id')->constrained('acc_users')->onDelete('cascade');
             $table->string('kota', 100);
             $table->tinyInteger('rating')->comment('1-5 bintang');
